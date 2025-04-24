@@ -84,7 +84,7 @@ placements_df=pd.DataFrame(placements)
 #importing Databasemanager
 from To_Database import DatabaseManager
 
-db=DatabaseManager
+db=DatabaseManager()
 db.create_tables()
 db.insert_dataframe(students_df, "students")
 db.insert_dataframe(programming_df, "programming")
