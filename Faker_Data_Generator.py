@@ -7,6 +7,7 @@ fake=Faker()
 students_num=100 #total number of data we want
 batches=["B1","B2","B3","B4"]
 languages=["Python","SQL","JAVA","Ruby"]
+Status=["Ready","Not ready","Placed"]
 
 #Creating the students table
 students=[]
@@ -52,4 +53,24 @@ for i in range(students_num):
         "leadership": r.randint(50, 100),
         "critical_thinking": r.randint(50, 100),
         "interpersonal_skills": r.randint(50, 100)
+    })
+
+# creating Placement table
+placements = []
+for i in range(students_num):
+    status = r.choice(Status)
+    company = fake.company() if status == 'Placed' else None
+    package = r.randint(40000, 150000) if status == 'Placed' else None
+    placement_date = fake.date_between(start_date='-1y', end_date='today') if status == 'Placed' else None
+
+    placements.append({
+        "placement_id": i + 1,
+        "student_id": i + 1,
+        "mock_interview_score": r.randint(0, 100),
+        "internships_completed": r.randint(0, 3),
+        "placement_status": status,
+        "company_name": company,
+        "placement_package": package,
+        "interview_rounds_cleared": r.randint(0, 5),
+        "placement_date": placement_date
     })
