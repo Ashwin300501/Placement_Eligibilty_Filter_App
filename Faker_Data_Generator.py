@@ -80,3 +80,16 @@ students_df=pd.DataFrame(students)
 programming_df=pd.DataFrame(programming)
 soft_skills_df=pd.DataFrame(soft_skills)
 placements_df=pd.DataFrame(placements)
+
+#importing Databasemanager
+from To_Database import DatabaseManager
+
+db=DatabaseManager
+db.create_tables()
+db.insert_dataframe(students_df, "students")
+db.insert_dataframe(programming_df, "programming")
+db.insert_dataframe(soft_skills_df, "soft_skills")
+db.insert_dataframe(placements_df, "placements")
+db.close()
+
+print("Data inserted to the database")
