@@ -39,3 +39,17 @@ for i in range(students_num):
         "certifications_earned":r.randint(0,3),
         "latest_project_score":r.randint(0,100)
     })
+
+#creating softskill table
+soft_skills=[]
+for i in range(students_num):
+    soft_skills.append({
+        "soft_skill_id": i + 1,
+        "student_id": i + 1,
+        "communication": r.randint(50, 100),
+        "teamwork": r.randint(50, 100),
+        "presentation": r.randint(50, 100),
+        "leadership": r.randint(50, 100),
+        "critical_thinking": r.randint(50, 100),
+        "interpersonal_skills": r.randint(50, 100)
+    })
