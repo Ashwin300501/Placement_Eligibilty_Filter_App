@@ -74,3 +74,9 @@ for i in range(students_num):
         "interview_rounds_cleared": r.randint(0, 5),
         "placement_date": placement_date
     })
+
+#converting all the data generated in to dataframe
+students_df=pd.DataFrame(students)
+programming_df=pd.DataFrame(programming)
+soft_skills_df=pd.DataFrame(soft_skills)
+placements_df=pd.DataFrame(placements)
