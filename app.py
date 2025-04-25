@@ -58,3 +58,61 @@ if placement_status!="Any":
     filtered_display=filtered[columns_to_show]
 
     st.dataframe(filtered_display)
+
+#tab2 Insights
+with tab2:
+    st.header("📊 Insights from Data")
+
+    conn = get_connection()
+
+    st.subheader("1. Average Problems Solved per Batch (Bar Chart)")
+    query1 = """
+    SELECT course_batch, AVG(problems_solved) AS avg_problems
+    FROM students
+    JOIN programming USING(student_id)
+    GROUP BY course_batch
+    ORDER BY course_batch
+    """
+    avg_problems_df = pd.read_sql_query(query1, conn)
+    st.bar_chart(avg_problems_df.set_index("course_batch"))
+
+    st.subheader("2. Top 5 Placement-Ready Students by Mock Interview Score")
+    query2 = """
+    SELECT s.name AS Name, p.mock_interview_score AS "Mock Interview Score",
+           sk.communication AS Communication, sk.presentation AS Presentation
+    FROM students s
+    JOIN placements p USING(student_id)
+    JOIN soft_skills sk USING(student_id)
+    WHERE p.placement_status = 'Ready'
+    ORDER BY p.mock_interview_score DESC
+    LIMIT 5
+    """
+    top_students_df = pd.read_sql_query(query2, conn)
+    st.table(top_students_df)
+
+    st.subheader("3. Bar Chart: Average Problems Solved by Gender")
+    query3 = """
+    SELECT s.gender, AVG(p.problems_solved) AS total_problems
+    FROM students s
+    JOIN programming p ON s.student_id = p.student_id
+    GROUP BY s.gender
+"""
+    gender_problems_df = pd.read_sql_query(query3, conn)
+    gender_problems_df.set_index("gender", inplace=True)
+    st.bar_chart(gender_problems_df)
+
+    st.subheader("4. Average Soft Skill Scores by Course")
+
+    query4 = """
+    SELECT s.course_batch AS course, 
+           AVG(sk.communication) AS average_communication, 
+           AVG(sk.presentation) AS average_presentation
+    FROM students s
+    JOIN soft_skills sk ON s.student_id = sk.student_id
+    GROUP BY s.course_batch
+    ORDER BY s.course_batch
+    """
+    skill_avg_df = pd.read_sql_query(query4, conn)
+    st.dataframe(skill_avg_df.style)
+
+    conn.close()
