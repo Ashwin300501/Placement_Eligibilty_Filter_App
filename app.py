@@ -39,21 +39,22 @@ with tab1:
     with col4:
         min_mock_interview_score=st.number_input("Min mock interview score",0,100)
     
-    merged=students_df.merge(programming_df,on="student_id")\
-                     .merge(soft_skills_df,on="student_id")\
-                     .merge(placements_df, on="student_id")
+    merged=students_df.merge(programming_df,on="students_id")\
+                     .merge(soft_skills_df,on="students_id")\
+                     .merge(placements_df, on="students_id")
     
-#filtered table
-filtered=merged[
-        (merged["problems_solved"] >= min_problems) &
-        (merged["communication"] >= min_softskill)&
-        (merged["mock_interview_score"]>=min_mock_interview_score)]
+    #filtered table
+    filtered=merged[
+            (merged["problems_solved"] >= min_problems) &
+            (merged["communication"] >= min_softskill)&
+            (merged["mock_interview_score"]>=min_mock_interview_score)]
 
-if placement_status!="Any":
-    filtered=filtered[filtered["placement_status"]==placement_status]
+    if placement_status != "Any":
+        filtered = filtered[filtered["placement_status"] == placement_status]
 
     st.success(f"{len(filtered)} students matched your criteria.")
-    columns_to_show=["student_id","name","age","email","enrollment_year","course_batch","graduation_year","problems_solved","communication","placement_status","mock_interview_score"]
+    columns_to_show=["students_id","name","age","email","enrollment_year","course_batch","graduation_year","problems_solved","communication","placement_status",
+                     "mock_interview_score"]
 
     filtered_display=filtered[columns_to_show]
 
@@ -69,7 +70,7 @@ with tab2:
     query1 = """
     SELECT course_batch, AVG(problems_solved) AS avg_problems
     FROM students
-    JOIN programming USING(student_id)
+    JOIN programming USING(students_id)
     GROUP BY course_batch
     ORDER BY course_batch
     """
@@ -81,8 +82,8 @@ with tab2:
     SELECT s.name AS Name, p.mock_interview_score AS "Mock Interview Score",
            sk.communication AS Communication, sk.presentation AS Presentation
     FROM students s
-    JOIN placements p USING(student_id)
-    JOIN soft_skills sk USING(student_id)
+    JOIN placements p USING(students_id)
+    JOIN soft_skills sk USING(students_id)
     WHERE p.placement_status = 'Ready'
     ORDER BY p.mock_interview_score DESC
     LIMIT 5
@@ -94,9 +95,9 @@ with tab2:
     query3 = """
     SELECT s.gender, AVG(p.problems_solved) AS total_problems
     FROM students s
-    JOIN programming p ON s.student_id = p.student_id
+    JOIN programming p ON s.students_id = p.students_id
     GROUP BY s.gender
-"""
+    """
     gender_problems_df = pd.read_sql_query(query3, conn)
     gender_problems_df.set_index("gender", inplace=True)
     st.bar_chart(gender_problems_df)
@@ -108,7 +109,7 @@ with tab2:
            AVG(sk.communication) AS average_communication, 
            AVG(sk.presentation) AS average_presentation
     FROM students s
-    JOIN soft_skills sk ON s.student_id = sk.student_id
+    JOIN soft_skills sk ON s.students_id = sk.students_id
     GROUP BY s.course_batch
     ORDER BY s.course_batch
     """

@@ -46,7 +46,7 @@ soft_skills=[]
 for i in range(students_num):
     soft_skills.append({
         "soft_skill_id": i + 1,
-        "student_id": i + 1,
+        "students_id": i + 1,
         "communication": r.randint(50, 100),
         "teamwork": r.randint(50, 100),
         "presentation": r.randint(50, 100),
@@ -65,7 +65,7 @@ for i in range(students_num):
 
     placements.append({
         "placement_id": i + 1,
-        "student_id": i + 1,
+        "students_id": i + 1,
         "mock_interview_score": r.randint(0, 100),
         "internships_completed": r.randint(0, 3),
         "placement_status": status,
